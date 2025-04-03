@@ -1,12 +1,10 @@
-# mcp_fred.py
 from mcp.server.fastmcp import FastMCP
 from fred_connector import FREDConnector
 
-# Initialize the MCP server
 mcp = FastMCP("FRED Data Connector")
 fred = FREDConnector()
 
-# Example tool: query FRED by series ID with optional date filters.
+# Tool to query FRED by series ID for given date.
 @mcp.tool()
 def query_fred(series_id: str, observation_start: str = None, observation_end: str = None) -> str:
     """
@@ -22,13 +20,14 @@ def query_fred(series_id: str, observation_start: str = None, observation_end: s
     """
     try:
         data = fred.get_series(series_id, observation_start, observation_end)
+        data = [{'date': x['date'], 'value':x['value']} for x in data['observations']]
         return str(data)  # For MVP, returning a string. You may format as needed.
     except Exception as e:
         return f"Error querying FRED: {e}"
 
-# Optionally, you could add another tool that allows a free-text query to be interpreted.
+# Tool to search in FRED.
 @mcp.tool()
-def search_fred(query: str) -> str:
+def search_fred(query: str, limit: int = 10) -> str:
     """
     Search for FRED series using natural language.
     
@@ -39,12 +38,14 @@ def search_fred(query: str) -> str:
         str: The JSON response with search results.
     """
     try:
-        results = fred.search_series(query)
-        return str(results)
+        results = fred.search_series(query, limit=limit)
+        results = results['seriess']
+        keys = ['id', 'title', 'observation_start', 'observation_end', 'frequency', 'frequency_short', 'units', 'units_short', 'seasonal_adjustment', 'seasonal_adjustment_short', 'last_updated', 'popularity', 'group_popularity', 'notes']
+        results_str = [{x:y[x] for x in y.keys() if x in keys} for y in results]
+        results_str = '\n.'.join(str(x) for x in results_str)
+        return results_str
     except Exception as e:
         return f"Error searching FRED: {e}"
 
 if __name__ == "__main__":
-    # Run the MCP server in development mode
-    mcp.run()
-    # mcp.run(transport='stdio')    
+    mcp.run(transport='stdio')

@@ -1,4 +1,3 @@
-# fred_connector.py
 import requests
 from config import FRED_API_KEY, FRED_BASE_URL
 
@@ -23,6 +22,6 @@ class FREDConnector:
             params["observation_end"] = observation_end
         return self._get("series/observations", params)
 
-    def search_series(self, query):
-        params = {"search_text": query}
+    def search_series(self, query, limit=1000):
+        params = {"search_text": query, "limit":limit}
         return self._get("series/search", params)
