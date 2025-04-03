@@ -7,8 +7,8 @@ def main():
     
     # Fetch DFII10 data
     series_id = "DFII10"  # 10-Year Treasury Inflation-Indexed Security
-    start_date = "2020-01-01"
-    end_date = "2025-01-01"
+    start_date = "2025-01-01"
+    end_date = "2025-01-11"
     
     try:
         # Get the data
@@ -18,18 +18,21 @@ def main():
             observation_end=end_date
         )
         
-        # Convert to pandas DataFrame
-        df = pd.DataFrame(response['observations'])
-        df['value'] = pd.to_numeric(df['value'].replace('.', pd.NA))
-        df['date'] = pd.to_datetime(df['date'])
+        # data = fred.get_series(series_id, observation_start, observation_end)
+        # return str(data)  # For MVP, returning a string. You may format as needed.        
+        print(response)
+        # # Convert to pandas DataFrame
+        # df = pd.DataFrame(response['observations'])
+        # df['value'] = pd.to_numeric(df['value'].replace('.', pd.NA))
+        # df['date'] = pd.to_datetime(df['date'])
         
-        # Display the first few rows
-        print("\nFirst few rows of the data:")
-        print(df.head())
+        # # Display the first few rows
+        # print("\nFirst few rows of the data:")
+        # print(df.head())
         
-        # Display basic statistics
-        print("\nBasic statistics:")
-        print(df['value'].describe())
+        # # Display basic statistics
+        # print("\nBasic statistics:")
+        # print(df['value'].describe())
         
     except Exception as e:
         print(f"Error fetching data: {str(e)}")
