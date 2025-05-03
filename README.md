@@ -21,8 +21,3 @@ Clone the repo and add below to the config.json
     ]
 }
 ```
-
-
-## Status
-
-**Work in Progress** – Currently supports limited functionality.
