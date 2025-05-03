@@ -26,9 +26,3 @@ Clone the repo and add below to the config.json
 ## Status
 
 **Work in Progress** – Currently supports limited functionality.
-
-## To-Do
-
-- [x] Establish connection to the MCP client  
-- [ ] Improve output formatting of fetched data  
-- [ ] Add support for additional APIs
